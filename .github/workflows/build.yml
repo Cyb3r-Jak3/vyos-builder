@@ -27,6 +27,7 @@ jobs:
         with:
           repository: vyos/vyos-build
           ref: ${{ matrix.version }}
+          path: vyos-build
 
       # - name: Checkout VyOS build branch
       #   run: git clone -b ${{ matrix.version }} --single-branch https://github.com/vyos/vyos-build
