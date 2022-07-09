@@ -10,28 +10,37 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        version: ["crux", "equuleus"]
+
     steps:
 
       - name: Pull Docker Container
-        run: docker pull vyos/vyos-build:crux 
+        run: docker pull vyos/vyos-build:${{ matrix.version }} 
 
-      - uses: actions/checkout@v3
+      - name: Checkout Repo
+        uses: actions/checkout@v3
 
-      # - uses: actions/checkout@v3
-      #   with:
-      #     repository: 'https://github.com/vyos/vyos-build'
-      #     ref: 'crux'
+      - name: Checkout VyOS Repo
+        uses: actions/checkout@v3
+        with:
+          repository: vyos/vyos-build
+          ref: ${{ matrix.version }}
 
-      - name: Checkout VyOS build branch
-        run: git clone -b crux --single-branch https://github.com/vyos/vyos-build
+      # - name: Checkout VyOS build branch
+      #   run: git clone -b ${{ matrix.version }} --single-branch https://github.com/vyos/vyos-build
 
       - name: Run Build ISO
-        run: docker run --rm -i --privileged -v $(pwd):/vyos -w /vyos vyos/vyos-build:crux bash ./build.sh
+        run: docker run --rm -i --privileged -v $(pwd):/vyos -w /vyos vyos/vyos-build:${{ matrix.version }} bash ./build.sh
 
       - name: Check Build output
         run: |
-          ls -la
-          ls -la vyos-build
           ls -la vyos-build/build
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.version }}-iso
+          path: vyos-build/build/*.iso
 
         
