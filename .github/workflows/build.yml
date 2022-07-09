@@ -28,5 +28,10 @@ jobs:
       - name: Run Build ISO
         run: docker run --rm -i --privileged -v $(pwd):/vyos -w /vyos vyos/vyos-build:crux bash ./build.sh
 
+      - name: Check Build output
+        run: |
+          ls la
+          ls la vyos-build
+          ls la vyos-build/build
 
         
