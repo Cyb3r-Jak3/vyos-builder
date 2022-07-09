@@ -1,0 +1,21 @@
+name: Build
+
+on:
+  push:
+    # branches: [ "main" ]
+    branches: [ "**" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: vyos/vyos-build:crux
+      options: -w /vyos --privileged --sysctl net.ipv6.conf.lo.disable_ipv6=0
+    steps:
+      - name: Configure
+        run: ./configure --architecture amd64 --build-by "git@cyberjake.xyz"
+      - name: Build
+        run: sudo make iso
+
+        
