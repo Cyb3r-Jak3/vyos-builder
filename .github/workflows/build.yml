@@ -30,8 +30,8 @@ jobs:
 
       - name: Check Build output
         run: |
-          ls la
-          ls la vyos-build
-          ls la vyos-build/build
+          ls -la
+          ls -la vyos-build
+          ls -la vyos-build/build
 
         
